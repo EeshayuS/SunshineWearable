@@ -122,6 +122,7 @@ public class MyWatchFace extends CanvasWatchFaceService {
         boolean mRegisteredTimeZoneReceiver = false;
         Paint mBackgroundPaint;
         Paint mTextPaint;
+        Paint mHighLowTextPaint;
         boolean mAmbient;
         Calendar mCalendar;
         final BroadcastReceiver mTimeZoneReceiver = new BroadcastReceiver() {
@@ -165,6 +166,9 @@ public class MyWatchFace extends CanvasWatchFaceService {
 
             mTextPaint = new Paint();
             mTextPaint = createTextPaint(resources.getColor(R.color.digital_text));
+
+            mHighLowTextPaint = new Paint();
+            mHighLowTextPaint = createTextPaint(resources.getColor(R.color.digital_text));
 
             mCalendar = Calendar.getInstance();
         }
@@ -230,8 +234,11 @@ public class MyWatchFace extends CanvasWatchFaceService {
                     ? R.dimen.digital_x_offset_round : R.dimen.digital_x_offset);
             float textSize = resources.getDimension(isRound
                     ? R.dimen.digital_text_size_round : R.dimen.digital_text_size);
+            float highLowTextSize = resources.getDimension(isRound
+                    ? R.dimen.digital_high_low_text_size_round : R.dimen.digital_high_low_text_size);
 
             mTextPaint.setTextSize(textSize);
+            mHighLowTextPaint.setTextSize(highLowTextSize);
         }
 
         @Override
@@ -302,8 +309,11 @@ public class MyWatchFace extends CanvasWatchFaceService {
                     mCalendar.get(Calendar.MINUTE), mCalendar.get(Calendar.SECOND));
             canvas.drawText(text, mXOffset, mYOffset, mTextPaint);
             if (!isInAmbientMode() && maxTemp != null) {
-                canvas.drawText(maxTemp, mXOffset, mYOffset, mTextPaint);
-                Log.e("e", maxTemp);
+                canvas.drawText(maxTemp, mXOffset + 120, mYOffset + 80, mHighLowTextPaint);
+                canvas.drawText(minTemp, mXOffset + 200, mYOffset + 80, mHighLowTextPaint);
+                if (weatherScaledIcon != null) {
+                    canvas.drawBitmap(weatherScaledIcon, mXOffset, mYOffset + 40, null);
+                }
             }
         }
 

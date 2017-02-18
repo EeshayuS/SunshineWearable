@@ -76,6 +76,8 @@ public class WearableDataSender implements GoogleApiClient.ConnectionCallbacks,
             putDataMapRequest.getDataMap().putAsset(WEATHER_ICON, icon);
         }
 
+        putDataMapRequest.getDataMap().putLong("time", System.currentTimeMillis());
+
         PutDataRequest putDataRequest = putDataMapRequest.asPutDataRequest().setUrgent();
         Wearable.DataApi.putDataItem(mGoogleApiClient, putDataRequest)
                 .setResultCallback(new ResultCallback<DataApi.DataItemResult>() {
